@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sales App</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/sales/manifest.json">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#000000">
+
+</head>
+<body>
+
+<h1>Sales Page</h1>
+
+<button id="installBtn" style="display:none;">
+  Install Sales App
+</button>
+
+<script>
+  // Register Service Worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sales/service-worker.js");
+  }
+
+  // Install Button
+  let deferredPrompt;
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    document.getElementById("installBtn").style.display = "block";
+  });
+
+  document.getElementById("installBtn").addEventListener("click", async () => {
+
+    if (deferredPrompt) {
+
+      deferredPrompt.prompt();
+
+      const result = await deferredPrompt.userChoice;
+
+      console.log(result);
+
+    }
+
+  });
+</script>
+
+</body>
+</html>
